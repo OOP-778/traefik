@@ -62,6 +62,8 @@ func (m *Manager) BuildTCP(rootCtx context.Context, serviceName string) (tcp.Han
 			conf.LoadBalancer.ServersTransport = provider.GetQualifiedName(ctx, conf.LoadBalancer.ServersTransport)
 		}
 
+		log.Debug().Msgf("Service %q gateway: %s", serviceName, conf.LoadBalancer.Gateway)
+
 		for index, server := range shuffle(conf.LoadBalancer.Servers, m.rand) {
 			srvLogger := logger.With().
 				Int(logs.ServerIndex, index).
