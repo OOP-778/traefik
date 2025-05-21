@@ -201,6 +201,10 @@ func (p *Provider) addServerTCP(i item, lb *dynamic.TCPServersLoadBalancer) erro
 		return errors.New("port is missing")
 	}
 
+	if len(lb.Gateway) != 0 {
+		i.Address = lb.Gateway
+	}
+
 	lb.Servers[0].Address = net.JoinHostPort(i.Address, port)
 
 	return nil
