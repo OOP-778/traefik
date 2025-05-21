@@ -88,7 +88,7 @@ type TCPServersLoadBalancer struct {
 	Servers          []TCPServer    `json:"servers,omitempty" toml:"servers,omitempty" yaml:"servers,omitempty" label-slice-as-struct:"server" export:"true"`
 	ServersTransport string         `json:"serversTransport,omitempty" toml:"serversTransport,omitempty" yaml:"serversTransport,omitempty" export:"true"`
 	// Use the gateway ip to route traffic
-	Gateway string `json:"gateway,omitempty" toml:"gateway,omitempty" yaml:"gateway,omitempty" export:"true"`
+	Gateway string `json:"gateway,omitempty" toml:"gateway,omitempty" yaml:"gateway,omitempty" label:"gateway" export:"true"`
 
 	// TerminationDelay, corresponds to the deadline that the proxy sets, after one
 	// of its connected peers indicates it has closed the writing capability of its
