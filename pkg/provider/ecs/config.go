@@ -215,6 +215,10 @@ func (p *Provider) addServerTCP(instance ecsInstance, loadBalancer *dynamic.TCPS
 		return errors.New("port is missing")
 	}
 
+	if len(loadBalancer.Gateway) != 0 {
+		ip = loadBalancer.Gateway
+	}
+
 	loadBalancer.Servers[0].Address = net.JoinHostPort(ip, port)
 
 	return nil
