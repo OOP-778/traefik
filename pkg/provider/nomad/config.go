@@ -203,9 +203,9 @@ func (p *Provider) addServerTCP(i item, lb *dynamic.TCPServersLoadBalancer) erro
 
 	if len(lb.Gateway) != 0 {
 		i.Address = lb.Gateway
-		log.Debug().Msgf("Using gateway address %s for TCP server", i.Address)
 	}
 
+	log.Debug().Msgf("Using gateway address %s for TCP server", lb.Gateway)
 	lb.Servers[0].Address = net.JoinHostPort(i.Address, port)
 
 	return nil
