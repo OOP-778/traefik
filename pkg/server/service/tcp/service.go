@@ -87,7 +87,7 @@ func (m *Manager) BuildTCP(rootCtx context.Context, serviceName string) (tcp.Han
 				}
 			}
 
-			handler, err := tcp.NewProxy(server.Address, conf.LoadBalancer.ProxyProtocol, dialer)
+			handler, err := tcp.NewProxy(server.Address, conf.LoadBalancer, dialer)
 			if err != nil {
 				srvLogger.Error().Err(err).Msg("Failed to create server")
 				continue

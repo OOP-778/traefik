@@ -21,14 +21,16 @@ type Proxy struct {
 }
 
 // NewProxy creates a new Proxy.
-func NewProxy(address string, proxyProtocol *dynamic.ProxyProtocol, dialer Dialer) (*Proxy, error) {
-	if proxyProtocol != nil && (proxyProtocol.Version < 1 || proxyProtocol.Version > 2) {
-		return nil, fmt.Errorf("unknown proxyProtocol version: %d", proxyProtocol.Version)
+func NewProxy(address string, loadBalancer *dynamic.TCPServersLoadBalancer, dialer Dialer) (*Proxy, error) {
+	if loadBalancer.ProxyProtocol != nil && (loadBalancer.ProxyProtocol.Version < 1 || loadBalancer.ProxyProtocol.Version > 2) {
+		return nil, fmt.Errorf("unknown proxyProtocol version: %d", loadBalancer.ProxyProtocol.Version)
 	}
+
+	log.Info().Msgf("Starting TCP proxy service on %s, load balancer: %+v", address, loadBalancer)
 
 	return &Proxy{
 		address:       address,
-		proxyProtocol: proxyProtocol,
+		proxyProtocol: loadBalancer.ProxyProtocol,
 		dialer:        dialer,
 	}, nil
 }
