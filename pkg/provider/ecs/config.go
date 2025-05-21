@@ -217,6 +217,7 @@ func (p *Provider) addServerTCP(instance ecsInstance, loadBalancer *dynamic.TCPS
 
 	if len(loadBalancer.Gateway) != 0 {
 		ip = loadBalancer.Gateway
+		log.Debug().Msgf("Using gateway %s for TCP server %s", ip, instance.Name)
 	}
 
 	loadBalancer.Servers[0].Address = net.JoinHostPort(ip, port)
