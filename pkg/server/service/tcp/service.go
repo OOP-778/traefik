@@ -62,14 +62,13 @@ func (m *Manager) BuildTCP(rootCtx context.Context, serviceName string) (tcp.Han
 			conf.LoadBalancer.ServersTransport = provider.GetQualifiedName(ctx, conf.LoadBalancer.ServersTransport)
 		}
 
-		log.Debug().Msgf("Service %q gateway: %s", serviceName, conf.LoadBalancer.Gateway)
-
 		for index, server := range shuffle(conf.LoadBalancer.Servers, m.rand) {
 			srvLogger := logger.With().
 				Int(logs.ServerIndex, index).
 				Str("serverAddress", server.Address).Logger()
 
-			if _, _, err := net.SplitHostPort(server.Address); err != nil {
+			_, port, err := net.SplitHostPort(server.Address)
+			if err != nil {
 				srvLogger.Error().Err(err).Msg("Failed to split host port")
 				continue
 			}
@@ -77,6 +76,11 @@ func (m *Manager) BuildTCP(rootCtx context.Context, serviceName string) (tcp.Han
 			dialer, err := m.dialerManager.Get(conf.LoadBalancer.ServersTransport, server.TLS)
 			if err != nil {
 				return nil, err
+			}
+
+			if len(conf.LoadBalancer.Gateway) != 0 {
+				srvLogger.Debug().Msgf("Using gateway ip %s", conf.LoadBalancer.Gateway)
+				server.Address = net.JoinHostPort(conf.LoadBalancer.Gateway, port)
 			}
 
 			// Handle TerminationDelay deprecated option.
